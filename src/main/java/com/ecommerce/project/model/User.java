@@ -14,6 +14,10 @@ import java.util.Set;
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
+@Table(uniqueConstraints = {
+        @UniqueConstraint(columnNames = "username"),
+        @UniqueConstraint(columnNames = "email")
+})
 public class User {
 
     @Id
@@ -21,13 +25,13 @@ public class User {
     private Long UserId;
 
     @NotNull
-    private String username;
+    private String userName;
 
     @Email
-    private String email;
+    private String userEmail;
 
     @NotNull
-    private String password;
+    private String userPassword;
 
 
     @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.EAGER)
