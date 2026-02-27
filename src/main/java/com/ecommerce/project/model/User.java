@@ -8,21 +8,25 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(uniqueConstraints = {
-        @UniqueConstraint(columnNames = "username"),
-        @UniqueConstraint(columnNames = "email")
+@Getter
+@Setter
+@Table(name = "users", uniqueConstraints = {
+        @UniqueConstraint(columnNames = "user_name"),
+        @UniqueConstraint(columnNames = "user_email")
 })
 public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long UserId;
+    private Long userId;
 
     @NotNull
     private String userName;
@@ -38,8 +42,14 @@ public class User {
     @JoinTable(name = "user_role",
             joinColumns = @JoinColumn (name="user_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id"))
-    @Getter
-    @Setter
     private Set<Role> roles = new HashSet<>();
 
+    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.EAGER)
+    @JoinTable(name = "user_address",
+            joinColumns = @JoinColumn (name="user_id"),
+            inverseJoinColumns = @JoinColumn(name = "address_id"))
+    private List<Address> addresses = new ArrayList<>();
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private Set<Product> products = new HashSet<>();
 }
