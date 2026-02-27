@@ -15,6 +15,7 @@ import java.util.Set;
 @AllArgsConstructor
 @Getter
 @Setter
+@ToString(exclude = {"roles", "addresses", "products"})
 @Table(name = "users", uniqueConstraints = {
         @UniqueConstraint(columnNames = "user_name"),
         @UniqueConstraint(columnNames = "user_email")
@@ -30,7 +31,8 @@ public class User {
     private String userName;
 
     @Email
-    @Column(name = "user_email")
+    @NotNull
+    @Column(name = "user_email", nullable = false)
     private String userEmail;
 
     @NotNull
@@ -45,7 +47,7 @@ public class User {
     private Set<Role> roles = new HashSet<>();
 
     @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE},
-            fetch = FetchType.EAGER)
+            fetch = FetchType.LAZY)
     @JoinTable(name = "user_address",
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "address_id"))
