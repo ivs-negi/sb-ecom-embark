@@ -1,10 +1,7 @@
 package com.ecommerce.project.model;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,23 +16,24 @@ public class Address {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Long addressId;
 
-    @Column(nullable = false)
+    @Column(name = "street", nullable = false)
     private String street;
 
-    @Column(nullable = false)
+    @Column(name = "city", nullable = false)
     private String city;
 
-    @Column(nullable = false)
+    @Column(name = "state", nullable = false)
     private String state;
 
-    @Column(nullable = false, length = 10)
+    @Column(name = "zip_code", nullable = false, length = 10)
     private String zipCode;
 
-    @Column(nullable = false)
+    @Column(name = "country", nullable = false)
     private String country;
 
-    @ManyToMany(mappedBy = "addresses")
+    @ManyToMany(mappedBy = "addresses",
+            cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     private List<User> users = new ArrayList<>();
 }

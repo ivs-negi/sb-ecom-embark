@@ -2,22 +2,31 @@ package com.ecommerce.project.model;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import jakarta.validation.constraints.Size;
+import lombok.*;
 
-@Entity(name="categories")
-@Data
+import java.util.ArrayList;
+import java.util.List;
+
+@Entity
+@Table(name = "categories")
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@ToString
 public class Category {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(unique = true)
     private Long categoryId;
 
     @NotBlank
+    @Size(min = 2, max = 100)
+    @Column(name = "category_name", nullable = false, unique = true, length = 100)
     private String categoryName;
 
+    @OneToMany(mappedBy = "category", cascade = CascadeType.ALL)
+    @ToString.Exclude
+    private List<Product> products = new ArrayList<>();
 }

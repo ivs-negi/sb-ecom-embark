@@ -1,33 +1,57 @@
 package com.ecommerce.project.model;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
+import lombok.*;
+
+import java.math.BigDecimal;
 
 @Entity
 @Table(name = "products")
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@ToString(exclude = {"category", "user"})
 public class Product {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-    private String name;
+    private Long productId;
+
+    @NotBlank
+    @Column(name = "product_name", nullable = false)
+    private String productName;
+
+    @Column(name = "image")
     private String image;
+
+    @Column(name = "description", length = 1000)
     private String description;
+
+    @NotNull
+    @Positive
+    @Column(name = "quantity", nullable = false)
     private Integer quantity;
-    private Double price;
-    private Double discount;
-    private Double finalPrice;
+
+    @NotNull
+    @Positive
+    @Column(name = "price", nullable = false, precision = 10, scale = 2)
+    private BigDecimal price;
+
+    @Column(name = "discount", precision = 5, scale = 2)
+    private BigDecimal discount;
+
+    @Column(name = "final_price", precision = 10, scale = 2)
+    private BigDecimal finalPrice;
 
     @ManyToOne
-    @JoinColumn(name = "category_id")
+    @JoinColumn(name = "category_id", nullable = false)
     private Category category;
 
     @ManyToOne
-    @JoinColumn(name = "seller_id")
+    @JoinColumn(name = "seller_id", nullable = false)
     private User user;
 }
